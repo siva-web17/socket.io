@@ -23,7 +23,7 @@ io.on('connection', socket => {
   })
   setInterval(function(){
     socket.emit('news_by_server', new Date() );
-   }, 50000);
+   }, 3000);
   // disconnect is fired when a client leaves the server
   socket.on('disconnect', () => {
     console.log('user disconnected')

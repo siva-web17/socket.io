@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
+import Highlight from 'react-highlight'
+import 'highlight.js/styles/monokai.css';
 const socket = socketIOClient('http://localhost:4001');
 
 class App extends Component {
@@ -8,7 +10,8 @@ class App extends Component {
     this.socket = socket;
     this.state = {
       color: 'white',
-      time: new Date()
+      time: new Date(),
+      console: []
     };
   }
   componentWillMount() {
@@ -17,6 +20,11 @@ class App extends Component {
       that.setState({
         time: data.toString()
       })
+      console.log(that.state.console)
+      that.state.console.push(that.state.time.toString())
+      that.setState(
+        that.state
+      )
     });
   }
   // sending sockets
@@ -28,12 +36,15 @@ class App extends Component {
   }
   // adding the function
   setColor = (color) => {
-    console.log(color);
+   // console.log(color);
     this.setState({
       color
     })
   }
   render() {
+    const listItems = this.state.console.map((number,i) =>
+        <li key={i}>{number}</li>
+    );
     return (
       <div style={{
         backgroundColor: this.state.color,
@@ -42,8 +53,12 @@ class App extends Component {
         <button onClick={() => this.send() }>Change Color</button>
         <button id="blue" onClick={() => this.setColor('blue')}>Blue</button>
         <button id="red" onClick={() => this.setColor('red')}>Red</button>
-        <p>
-        <code>{this.state.time.toString()}</code></p>
+        <p><code>{this.state.time.toString()}</code></p>
+
+        <Highlight className='LLVM IR'>
+            {this.state.time.toString()}
+        </Highlight>
+
       </div>
     )
   }
